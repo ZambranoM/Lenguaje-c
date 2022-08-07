@@ -45,6 +45,9 @@ int main(int argc, char** argv){
 			}
 	}
 	//despues de tener inicializada mi matriz con los caracteres de 0 ahora creo mis barcos
+	
+	//Muestro el resultado de mi matrz, opcional 
+	mostrar(matriz,nfilas, ncol);
 	//Barco uno
 	barcoUno(matriz);
 	//barco dos 
@@ -53,13 +56,51 @@ int main(int argc, char** argv){
 	barcoTres(matriz);
 	//Llamo a mi funcion que valida los aciertos y errores que de los comando de mi funcion
 	tiro(matriz);
-	//Muestro el resultado de mi matrz, opcional 
-	mostrar(matriz,nfilas, ncol);
+	
 	//Termina mi funcion principal
 }
 
 //Cuando trabaje con arreglos bidimensionales y tenga que pasar como parametros debo poner como tamanio maximo el mismo que de columas si no me crea error;
 
+
+//Funcion para validar los valores de entrada
+int valor1(){
+	int num=-1,i;
+	char a;
+	char letras[]={'A','B','C','E','F','G','H','I','J','K'};
+	char letras2[]={'a','b','c','e','f','g','h','i','j','k'};
+	do{
+		printf("\nPor favor ingrese la primera coordenada: ");
+		scanf("%c",&a);
+		for(i=0;i<10;i++){
+			if(a==letras[i] || a==letras2[i]){
+				num=i;
+			}
+		}
+		if(num<0){
+			printf("\nPor favor ingrese bien la primera coordenada: ");
+		}
+	}while(num<0);
+
+	return num;
+	
+}
+
+//Funcion para validar mi segunda coordenada
+int valor2(){
+	int b,i;
+	
+	do{
+		printf("\nPor favor ingrese la segunda coordenada: ");
+		scanf("%d",&b);
+		if( b>10 || b==0){
+			printf("\nPor favor ingrese valores entre 1 y 10"); 
+		}
+		
+	}while(b==0 || b>10);
+	b=b-1;
+	return b;
+}
 //Creo mi funcion tiro
 void  tiro(char m[][10]){
 	int a,b,cont=0,i;
@@ -72,26 +113,19 @@ void  tiro(char m[][10]){
 		//Uso fflush para poder limpiar el bufe de entrada 
 		fflush(stdin);
 		//muestro la cantidad de tiros restantes
-		printf("La cantida de tiros que le quedan son: %d",10-i);
-		//Creo un ciclo repetitivo para poder validar los valores ingresados y si el usuario ingrese uno mal repetirlo hara que funcionen
-		do{
-			printf("\nIngrese el primera coordenada: ");
-			scanf("%d",&a);
-			printf("\nIngrese el segunda coordenada");
-			scanf("%d",&b);
-			//Creo una condicion para decirle al usuario que por favor ingrese bien las coordenadas
-			if(a>10 || b>10 || a==0 || b==0){
-				printf("Por favor ingrese valores entre 1 y 10"); 
-			}
-		}while(a>10 || b>10 || a==0 || b==0);
-		//Ya que mi usuario ingresa valores de 1 a 10 y mi arreglo va de 0 a 9 le resto uno a cada valor introducido por el usuario
-		a=a-1;
-		b=b-1;
+		printf("\nLa cantida de tiros que le quedan son: %d",10-i);
+		//Ya que contrui funciones que me sirven para poder validar coordenadas las uso 
+		a=valor1();
+		b=valor2();
 		//Valido si las coordenada introducidas por el jugador son correctas y si es asi me marque un '*'
 	if(m[a][b]=='1'||m[a][b]=='2'|| m[a][b]=='3'){
 		m[a][b]='*';
 		cont=cont+1;
-	}else{
+	}
+	if(m[a][b]=='*'||m[a][b]=='*'|| m[a][b]=='*'){
+		printf("Esa coordenada ya fue usada por favor ingrese otra");
+	}
+	else{
 		//Y si no son corrextas me marque una 'X'
 		m[a][b]='X';
 		}
@@ -191,22 +225,37 @@ void barcoTres(char m[][10]){
 }
 //Funcion mostrar 
 void mostrar(char m[][10], int nfilas, int ncol){
+	//Definos mis varaibles a usar en la funcion
 	int i,j,k,conta=0;
+	//Creo mi arreglo num para mostrar por pantalla para que el usuario pueda ver la posicion de las filas 
 	int nume[]={1,2,3,4,5,6,7,8,9,10};
+	//Creo mi arreglo letras para mostralo por pantalla y asi el usuario se ubique 
 	char letras[]={'A','B','C','E','F','G','H','I','J','k'};
-	printf(" ");
+	//Coloco un espacio para cuadrar mi arreglo numero centrado a las columas de mi matriz
+	printf("  ");
+	//Comienzo a recorrer mi arreglo nume y mostrarlo por pantalla
 	for(k=0;k<10;k++){
-		printf(" %d",nume[k]);
+		//Tiene tantos espacios para mostrar centrado los numero dentro de la matriz 
+		printf("   %d",nume[k]);
 	}
+	//Ahora un salto de linea para que despues que termine de recorrer nume comience a mostrar mi matriz
 	printf("\n");
+	//Comienzo a recorrer mi matriz
 	for(i=0;i<nfilas;i++){
-		
-		printf("%c ",letras[i]);
-		
+		//Comienzo colocando un espacio para que no quede tan pegada y luego la letra que corresponda al indice "i" luego otro espacio para cuadrar bine la matriz 
+		printf(" %c ",letras[i]);
+		//Ahora recorro la columnas de mi matriz con este segundo for 
 		for(j=0;j<ncol;j++){
-			printf("%c ",m[i][j]);
+			//muestro por pantalla lo que contenga mi matriz comenzando con una barra "|" luego por el valor guardado en mi matriz y despues un espacio
+			printf("| %c ",m[i][j]);
+			if(j==9){
+				//Ya que solo estoy usando una barra nada mas, ya que si pongo las dos se va a ver desordenado 
+				//Creo una condicion para que cuando se ejecute el segundo for, y mi indice, es decir "j" sea igual al ultimo valor es decir 9 me imprima 
+				//la ultima barra y crear bien la matriz 
+				printf("|");
+			}
 		}
-		
+		//Hago un  salto de linea al final de cada ciclo for para que cuando el primer for se vuelva a ejecutar comienze en otra linea
 		printf("\n");
 	}
 }
